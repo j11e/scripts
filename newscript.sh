@@ -25,7 +25,6 @@ TEMPLATE_DIR=$(dirname $0:A)
 SCRIPT_NAME="$1"
 
 # find out template name from parameters (if extension indicated)
-
 SCRIPTNAME_EXTENSION=$(echo "$1" | cut -d'.' -f2)
 if [[ "$SCRIPTNAME_EXTENSION" == "py" ]];
 then
@@ -38,10 +37,11 @@ then
 	EDITOR_COMMAND="$2"
 fi
 
-echo "copying $TEMPLATE_DIR/$TEMPLATE_NAME to ./$SCRIPT_NAME and editing it"
+# copy template, replace {name} with the name, make it exectuable, and edit it
+cp "$TEMPLATE_DIR/$TEMPLATE_NAME" "./$SCRIPT_NAME"
 
-$(cp "$TEMPLATE_DIR/$TEMPLATE_NAME" "./$SCRIPT_NAME")
-$(sed -i "s/{name}/$SCRIPT_NAME/g" "./$SCRIPT_NAME")
-$(chmod +x "./SCRIPT_NAME")
+sed -i "s/{name}/$SCRIPT_NAME/g" "./$SCRIPT_NAME"
+
+chmod +x "./SCRIPT_NAME"
+
 $EDITOR_COMMAND $SCRIPT_NAME
-# $($EDITOR_COMMAND "./$SCRIPT_NAME") 
