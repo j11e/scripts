@@ -1,0 +1,51 @@
+#!/usr/bin/env sh
+
+# Copyright (c) 2014 Flaviu Tamas
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+# THE SOFTWARE.
+
+# First try compilers which are known to be fast(er than GCC)
+if command -v tcc >/dev/null 2>&1; then
+  COMPILER=--cc:tcc
+elif command -v clang >/dev/null 2>&1; then
+  COMPILER=--cc:clang
+fi
+
+output=$(mktemp -d -t -- "$(basename "${1}").XXXX")
+trap "rm -rf $output" EXIT
+
+nim c --verbosity:0 \
+      --hints:off \
+      $COMPILER \
+      --out:"$output/executable" \
+      --nimcache:"$output/" \
+      "$1"
+
+compiler_exit=$?
+
+# first argument is filename, not needed any more
+shift
+
+if [ "$compiler_exit" -eq 0 ]; then  # compile success
+  # "$@" is necessary to preserve whitespaces in arguments, which $* doesn't
+  $output/executable "$@"
+  exit $?
+else  # compile fail
+  exit $compiler_exit
+fi
