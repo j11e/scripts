@@ -1,0 +1,14 @@
+#!/bin/bash
+
+current=`synclient -l | grep Touchpad | awk '{print $3}'`
+
+if [ "$current" == "1" ] 
+    then
+        synclient TouchpadOff=0
+        echo "touchpad enabled."
+    else
+        synclient TouchpadOff=1
+        echo "touchpad disabled."
+fi
+
+
