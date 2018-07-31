@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# ------------------------------------------------------------------------------
+# perg
+#
+# grep, but with params reversed, so it's easier to repeat greps on the same 
+# folder: up arrow, ^W, replace term to match
+# For now, -iR is always used; actual option handling to be added some day maybe
+# Also, to grep on "*", use a backslash to prevent param expansion (perg \* xxx)
+# ------------------------------------------------------------------------------
+
+length=$(($#-1))
+params=${@:2}
+
+grep -iR --color=auto "$params" $1

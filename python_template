@@ -1,13 +1,24 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-# ------------------------------------------------------------------------------
-# {name}
-#
-# TODO
-# ------------------------------------------------------------------------------
+"""
+{name}: short desc
+
+long desc
+"""
+
+import argparse
+
 
 def main():
-	pass
+	arg_parser = argparse.ArgumentParser(description="...", epilog="...")
+
+	arg_parser.add_argument('--flag', dest='flag', default='default',
+	                   help="bla")
+
+	args = arg_parser.parse_args()
+
+
 
 if __name__ == '__main__':
 	main()

@@ -42,6 +42,6 @@ cp "$TEMPLATE_DIR/$TEMPLATE_NAME" "./$SCRIPT_NAME"
 
 sed -i "s/{name}/$SCRIPT_NAME/g" "./$SCRIPT_NAME"
 
-chmod +x "./SCRIPT_NAME"
+chmod +x "./$SCRIPT_NAME"
 
 $EDITOR_COMMAND $SCRIPT_NAME
